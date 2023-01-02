@@ -15,6 +15,10 @@ class Users extends Migration
                 'unsigned' => true,
                 'auto_increment' => true
             ],
+            'roles' => [
+                'type' => 'BOOLEAN',
+                'default' => false
+            ],
             'nip' => [
                 'type' => 'INT',
                 'constraint' => 19,
