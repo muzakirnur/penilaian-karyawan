@@ -38,9 +38,12 @@ $routes->set404Override();
 $routes->get('/', 'LoginController::index', ['filter' => 'noauth']);
 $routes->post('login', 'LoginController::auth', ['filter' => 'noauth']);
 /* Routes Untuk Admin */
-$routes->group('admin', ['filter' => 'auth'], function ($routes) {
-    $routes->get('admin/dashboard', 'AdminController::index');
-});
+// $routes->group('admin', ['filter' => 'auth'], function ($routes) {
+//     $routes->get('admin/dashboard', 'AdminController::index');
+// });
+$routes->get('admin/dashboard', 'AdminController::dashboard', ['filter' => 'auth']);
+$routes->get('admin/karyawan', 'KaryawanController::index', ['filter' => 'auth']);
+$routes->get('admin/kriteria', 'KriteriaController::index', ['filter' => 'auth']);
 /* Routes Untuk User */
 $routes->group('user', ['filter' => 'auth'], function ($routes) {
     $routes->get('user', 'UserController::index');

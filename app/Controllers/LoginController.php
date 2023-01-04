@@ -22,35 +22,65 @@ class LoginController extends BaseController
 
     public function auth()
     {
-        // Mendefinisikan Email dan Password dari Request
-        $emailRequest = $this->request->getVar('nip');
-        $passRequest = $this->request->getVar('password');
+        $data = [];
 
-        // Get User Data
-        $userData = $this->userModel->where('nip', $emailRequest)->first();
 
-        // Check if Data Exist
-        if (!$userData == null) {
-            // Checking the Password Value
-            $authPassword = password_verify($passRequest, $userData['password']);
-            if ($authPassword == true) {
-                // Make Session Login
-                $user = [
-                    'id' => $userData['id'],
-                    'nama' => $userData['nama'],
-                    'nip' => $userData['nip'],
-                    'roles' => $userData['roles'],
-                    'isLoggedIn' => TRUE,
-                ];
-                session()->set($user);
-                return redirect()->to('admin')->with('success', 'Login Successfully');
+            $rules = [
+                'email' => 'required',
+                'password' => 'required',
+            ];
+
+            $errors = [
+                'password' => [
+                    'validateUser' => "Email or Password didn't match",
+                ],
+            ];
+
+            if (!$this->validate($rules, $errors)) {
+
+                return view('login', [
+                    "validation" => $this->validator,
+                ]);
+
             } else {
-                session()->setFlashdata('error', 'The credential is incorrect');
-                return redirect()->back()->withInput();
+                $model = new User();
+
+                $user = $model->where('nip', $this->request->getVar('nip'))
+                    ->first();
+
+                // Stroing session values
+                $this->setUserSession   ($user);
+
+                // Redirecting to dashboard after login
+                if($user['roles'] == true){
+
+                    return redirect()->to(base_url('admin/dashboard'));
+
+                }elseif($user['roles'] == false){
+
+                    return redirect()->to(base_url('user'));
+                }
             }
-        } else {
-            session()->setFlashdata('error', 'The NIP doesnt exist');
-            return redirect()->back()->withInput();
-        }
+    }
+
+    private function setUserSession($user)
+    {
+        $data = [
+            'id' => $user['id'],
+            'nama' => $user['nama'],
+            'nip' => $user['nip'],
+            "roles" => $user['roles'],
+            'isLoggedIn' => true,
+        ];
+
+        session()->set($data);
+        return true;
+    }
+
+    public function logout()
+    {
+        session()->destroy();
+        return redirect()->to('login');
     }
 }
+

@@ -13,8 +13,12 @@ class AdminController extends BaseController
             exit;
         }
     }
-    public function index()
+    public function dashboard()
     {
-        return view("admin/dashboard");
+        $data = 
+        [
+            'page' => "Dashboard Admin",
+        ];
+        return view("admin/dashboard", $data);
     }
 }
