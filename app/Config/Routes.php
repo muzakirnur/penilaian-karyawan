@@ -35,8 +35,16 @@ $routes->set404Override();
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
-$routes->get('/', 'LoginController::index');
-$routes->post('/', 'LoginController::auth');
+$routes->get('/', 'LoginController::index', ['filter' => 'noauth']);
+$routes->post('login', 'LoginController::auth', ['filter' => 'noauth']);
+/* Routes Untuk Admin */
+$routes->group('admin', ['filter' => 'auth'], function ($routes) {
+    $routes->get('admin/dashboard', 'AdminController::index');
+});
+/* Routes Untuk User */
+$routes->group('user', ['filter' => 'auth'], function ($routes) {
+    $routes->get('user', 'UserController::index');
+});
 
 /*
  * --------------------------------------------------------------------

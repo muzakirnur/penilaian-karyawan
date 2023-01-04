@@ -30,6 +30,7 @@ class Users extends Migration
             'alamat' => [
                 'type' => 'VARCHAR',
                 'constraint' => 255,
+                'null' => true
             ],
             'password' => [
                 'type' => 'VARCHAR',

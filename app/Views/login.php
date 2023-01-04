@@ -22,19 +22,30 @@
                 <a href="/" class="h1"><b>Penilain</b> Karyawan</a>
             </div>
             <div class="card-body">
+                <?php if (session()->getFlashdata('success')) : ?>
+                    <div class="alert alert-success" role="alert">
+                        <?= session()->getFlashdata('success'); ?>
+                    </div>
+                <?php endif; ?>
+                <?php if (session()->getFlashdata('error')) : ?>
+                    <div class="alert alert-danger" role="alert">
+                        <?= session()->getFlashdata('error'); ?>
+                    </div>
+                <?php endif; ?>
                 <p class="login-box-msg">Silahkan Login untuk memulai</p>
 
-                <form action="#" method="post">
+                <form action="<?= base_url('login') ?>" method="post">
+                    <?= csrf_field(); ?>
                     <div class="input-group mb-3">
-                        <input type="number" class="form-control" placeholder="NIP POS">
+                        <input type="number" class="form-control" placeholder="NIP POS" value="<?= old('nip'); ?>" name="nip">
                         <div class="input-group-append">
                             <div class="input-group-text">
-                                <span class="fas fa-envelope"></span>
+                                <span class="fas fa-key"></span>
                             </div>
                         </div>
                     </div>
                     <div class="input-group mb-3">
-                        <input type="password" class="form-control" placeholder="Password">
+                        <input type="password" class="form-control" placeholder="Password" name="password">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-lock"></span>
@@ -44,7 +55,6 @@
                     <div class="row">
                         <div class="col-8">
                             <p class="mb-1">
-                                <a href="forgot-password.html">I forgot my password</a>
                             </p>
                         </div>
                         <!-- /.col -->
